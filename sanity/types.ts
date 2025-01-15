@@ -172,7 +172,7 @@ export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: sanity/lib/queries.ts
 // Variable: STARTUPS_QUERY
-// Query: *[_type == "startup" && defined(slug.current)] | order(_createdAt desc) {        _id,        title,        slug,        author->{             name,             _id,             image,             bio        },        views,        description,        category,        image        }
+// Query: *[_type == "startup" && defined(slug.current) && (!defined($search) || title match $search || category match $search || author->name match $search )] | order(_createdAt desc) {        _id,        title,        slug,        author->{             name,             _id,             image,             bio        },        views,        description,        category,        image,        _createdAt        }
 export type STARTUPS_QUERYResult = Array<{
   _id: string;
   title: string | null;
@@ -187,12 +187,13 @@ export type STARTUPS_QUERYResult = Array<{
   description: string | null;
   category: string | null;
   image: string | null;
+  _createdAt: string;
 }>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    "\n    *[_type == \"startup\" && defined(slug.current)] | order(_createdAt desc) {\n        _id,\n        title,\n        slug,\n        author->{\n             name,\n             _id,\n             image,\n             bio\n        },\n        views,\n        description,\n        category,\n        image    \n    }\n": STARTUPS_QUERYResult;
+    "\n    *[_type == \"startup\" && defined(slug.current) && (!defined($search) || title match $search || category match $search || author->name match $search )] | order(_createdAt desc) {\n        _id,\n        title,\n        slug,\n        author->{\n             name,\n             _id,\n             image,\n             bio\n        },\n        views,\n        description,\n        category,\n        image,\n        _createdAt    \n    }\n": STARTUPS_QUERYResult;
   }
 }
