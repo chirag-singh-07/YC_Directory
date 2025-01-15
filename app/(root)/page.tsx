@@ -1,5 +1,7 @@
-import StartupCard from "@/components/StartupCard";
+import StartupCard, { StartupTypeCard } from "@/components/StartupCard";
 import SearchForm from "../../components/SearchForm";
+import { client } from "@/sanity/lib/client";
+import { STARTUPS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Home({
   searchParams,
@@ -7,24 +9,7 @@ export default async function Home({
   searchParams: Promise<{ query: string }>;
 }) {
   const query = (await searchParams).query;
-
-  const posts = [
-    {
-      _createAt: new Date(),
-      views: 55,
-      author: {
-        _id: 1,
-        name:"Chirag"
-      },
-      _id: 1,
-      desciption: "This is a description",
-      image:
-        "https://png.pngtree.com/thumb_back/fh260/background/20230408/pngtree-robot-white-cute-robot-blue-light-background-image_2199825.jpg",
-      title: " We Robots",
-      category: "Robots",
-    },
-  ];
-
+  const posts = await client.fetch(STARTUPS_QUERY);
   return (
     <>
       <section className="pink_container">
@@ -44,13 +29,15 @@ export default async function Home({
           {query ? `Search results for ${query}` : `All Startups`}
         </p>
         <ul className="mt-7 card_grid">
-          {posts?.length > 0 ? (posts.map((post:StartupCardType)=>(
-            <>  
-              <StartupCard key={post?._id} post={post}/>
+          {posts?.length > 0 ? (
+            posts.map((post: StartupTypeCard) => (
+              <StartupCard key={post?._id} post={post} />
+            ))
+          ) : (
+            <>
+              <p className="no-results">No startups found</p>
             </>
-          ))):(<>
-            <p className="no-results">No startups found</p>
-          </>)}
+          )}
         </ul>
       </section>
     </>
