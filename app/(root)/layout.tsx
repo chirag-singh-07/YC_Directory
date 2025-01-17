@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import { Toaster } from "@/components/ui/toaster";
 import React from "react";
 
 export default function Layout({
@@ -8,6 +9,7 @@ export default function Layout({
     <main className="font-work-sans">
       <Navbar />
       {children}
+      <Toaster/>
     </main>
   );
 }
